@@ -20,3 +20,10 @@ def montar_physical_address(tam_pagina, frame_number, offset):
     BITS_OFFSET = int(math.log2(tam_pagina))
     physical_address = (frame_number << BITS_OFFSET) | offset
     return physical_address
+
+
+def registrar_endereco_conteudo(arquivo, logical_address, physical_address, conteudo):
+    """
+    Escreve no arquivo passado por parametro os enderecos logicos e fisicos, alem do conteudo na memoria.
+    """
+    arquivo.write(f"Endereco Virtual: {logical_address}  Endereco Fisico: {physical_address}  Conteudo: {conteudo}\n")
