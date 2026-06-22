@@ -63,7 +63,7 @@ class TLB:
         self.tabela.clear()
 
 
-    def get_hit_miss_rate(self):
+    def get_hit_rate(self):
         """
         Retorna a taxa de hit e miss da TLB.
         return hit_rate, miss_rate
@@ -73,7 +73,20 @@ class TLB:
             return 0.0
         
         hit_rate = (self.hits / acessos) * 100
-        miss_rate = (self.misses / acessos) * 100
         
-        return hit_rate, miss_rate
+        return hit_rate
+
+
+    def show(self, arquivo):
+        """
+        Mostra e escreve a TLB e suas entradas. 
+        """
+        arquivo.write("************\n")
+        arquivo.write("Página - Quadro\n")
+
+        for entrada in self.tabela.values():
+            arquivo.write(f"{entrada.page_number} - {entrada.frame_number}\n")
+
+        arquivo.write("************")
+
             
