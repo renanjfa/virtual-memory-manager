@@ -11,13 +11,14 @@ ALGORITMO_SUB   = sys.argv[3]
 
 CAPACIDADE_MEMORIA_FISICA = 65536
 TAMANHO_PAGINA = CAPACIDADE_MEMORIA_FISICA // QUADROS
+PATH_SAIDA = "saida/correct.txt"
 
 tlb = TLB(capacidade= 16, algoritmo= ALGORITMO_SUB)
-page_table = PageTable(num_quadros=QUADROS)       
+page_table = PageTable(num_quadros=256)       
 ram = RAM(quantidade_quadros=QUADROS)
 
 
-with open("correct.txt", "w") as result:
+with open(PATH_SAIDA, "w") as result:
     with open(ADDRESS_FILE, "r", encoding="utf-8") as arquivo:
         for linha in arquivo:
             linha = linha.strip()

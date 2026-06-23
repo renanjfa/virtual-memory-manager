@@ -5,7 +5,7 @@ def conversor_logical_address(tam_pagina, logical_address):
     Retorna o page_number e offset relativo ao endereco logico passado.
     """
     BITS_OFFSET = int(math.log2(tam_pagina))
-    MASK_OFFSET = tam_pagina
+    MASK_OFFSET = tam_pagina - 1
 
     page_number = logical_address >> BITS_OFFSET
     offset = logical_address & MASK_OFFSET
