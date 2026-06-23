@@ -23,7 +23,28 @@ Pagina -> Quadro
 Pagina - Quadro
 0 - 0
 ************
+Endereco Virtual: 255  Endereco Fisico: 255  Conteudo: 63
+Endereco Virtual: 750  Endereco Fisico: 494  Conteudo: 0
+Endereco Virtual: 800  Endereco Fisico: 544  Conteudo: 0
+Endereco Virtual: 1230  Endereco Fisico: 974  Conteudo: 1
+============ PAGE TABLE ============
+Pagina -> Quadro
+  0   ->   0
+  2   ->   1
+  3   ->   2
+  4   ->   3
+====================================
+************
+Pagina - Quadro
+0 - 0
+2 - 1
+3 - 2
+4 - 3
+************
+Endereco Virtual: 104  Endereco Fisico: 104  Conteudo: 0
+Endereco Virtual: 105  Endereco Fisico: 105  Conteudo: 0
+Endereco Virtual: 800  Endereco Fisico: 544  Conteudo: 0
 
 
-TAXA DE TLB HIT: 88.89%
-TAXA DE PAGE-FAULT: 11.11%
+TAXA DE TLB HIT: 75.00%
+TAXA DE PAGE-FAULT: 25.00%

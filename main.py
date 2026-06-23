@@ -8,8 +8,8 @@ ADDRESS_FILE    = sys.argv[1]
 QUADROS         = int(sys.argv[2])
 ALGORITMO_SUB   = sys.argv[3]
 
-CAPACIDADE_MEMORIA_FISICA   = 65536
-TAMANHO_PAGINA              = CAPACIDADE_MEMORIA_FISICA // QUADROS
+TAMANHO_PAGINA              = 256
+CAPACIDADE_MEMORIA_FISICA   = QUADROS * TAMANHO_PAGINA
 PATH_SAIDA                  = "saida/correct.txt"
 
 tlb         = TLB(16, ALGORITMO_SUB)

@@ -11,3 +11,12 @@ TLB
 105
 PageTable
 TLB
+255
+750
+800
+1230
+PageTable
+TLB
+104
+105
+800

@@ -46,7 +46,11 @@ class RAM:
             frame_escolhido = self.quadros_ocupados.index(-1)
             
             self.quadros_ocupados[frame_escolhido] = page_number
-            self.fila_fifo.append(frame_escolhido)
+            alg = self.algoritmo.upper()
+            if alg == "FIFO":
+                self.fila_fifo.append(frame_escolhido)
+            elif alg == "LRU":
+                self.historico_lru.append(frame_escolhido)
             
         # Caso B: RAM LOTADA! Executar algoritmo de substituição
         else:
@@ -70,6 +74,8 @@ class RAM:
             self.quadros_ocupados[frame_escolhido] = page_number
             if alg == "FIFO":
                 self.fila_fifo.append(frame_escolhido)
+            elif alg == "LRU":
+                self.historico_lru.append(frame_escolhido)
 
         # Atualiza o histórico de uso do frame escolhido
         self.registrar_acesso(frame_escolhido)
