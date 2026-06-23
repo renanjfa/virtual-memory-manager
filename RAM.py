@@ -75,7 +75,7 @@ class RAM:
         self.registrar_acesso(frame_escolhido)
 
         # 2. Ler do arquivo binário e jogar no espaço do frame escolhido na RAM
-        with open("BACKING_STORE.bin", "rb") as disk:
+        with open("BACKING_STORE/BACKING_STORE.bin", "rb") as disk:
             # Posiciona o cursor no início da página lógica no disco
             disk.seek(page_number * tamanho_pagina)
             dados_pagina = disk.read(tamanho_pagina)

@@ -90,11 +90,11 @@ class TLB:
         Mostra e escreve a TLB e suas entradas. 
         """
         arquivo.write("************\n")
-        arquivo.write("Página - Quadro\n")
+        arquivo.write("Pagina - Quadro\n")
 
         for entrada in self.tabela.values():
             arquivo.write(f"{entrada.page_number} - {entrada.frame_number}\n")
 
-        arquivo.write("************")
+        arquivo.write("************\n")
 
             

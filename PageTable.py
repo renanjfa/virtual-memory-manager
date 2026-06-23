@@ -45,7 +45,7 @@ class PageTable:
     def show(self, arquivo_write):
         """Escreve o estado atual da Page Table no arquivo especificado."""
         arquivo_write.write("============ PAGE TABLE ============\n")
-        arquivo_write.write("Página -> Quadro\n")
+        arquivo_write.write("Pagina -> Quadro\n")
         for pagina, quadro in enumerate(self.tabela):
             if quadro != -1:
                 arquivo_write.write(f"  {pagina}   ->   {quadro}\n")

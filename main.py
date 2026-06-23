@@ -4,18 +4,17 @@ from TLB import TLB
 from PageTable import PageTable
 from RAM import RAM
 
-# Parâmetros lidos do terminal
 ADDRESS_FILE    = sys.argv[1]
 QUADROS         = int(sys.argv[2])
 ALGORITMO_SUB   = sys.argv[3]
 
-CAPACIDADE_MEMORIA_FISICA = 65536
-TAMANHO_PAGINA = CAPACIDADE_MEMORIA_FISICA // QUADROS
-PATH_SAIDA = "saida/correct.txt"
+CAPACIDADE_MEMORIA_FISICA   = 65536
+TAMANHO_PAGINA              = CAPACIDADE_MEMORIA_FISICA // QUADROS
+PATH_SAIDA                  = "saida/correct.txt"
 
-tlb = TLB(16, ALGORITMO_SUB)
-page_table = PageTable(256)       
-ram = RAM(QUADROS, CAPACIDADE_MEMORIA_FISICA, ALGORITMO_SUB)
+tlb         = TLB(16, ALGORITMO_SUB)
+page_table  = PageTable(256)       
+ram         = RAM(QUADROS, CAPACIDADE_MEMORIA_FISICA, ALGORITMO_SUB)
 
 total_enderecos = 0
 
@@ -44,6 +43,7 @@ with open(PATH_SAIDA, "w") as result:
                 frame_number = tlb.lookup(page_number)
 
                 # TLB Hit!!
+
                 if frame_number is not None:
                     if ALGORITMO_SUB == "LRU": ram.registrar_acesso(frame_number)
 
@@ -52,11 +52,12 @@ with open(PATH_SAIDA, "w") as result:
                     registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
                     continue
 
-                # TLB Miss
+                # TLB Miss -> lookup em PageTable
 
                 frame_number = page_table.lookup(page_number)
 
                 # PageTable Hit!!
+
                 if frame_number is not None:
                     if ALGORITMO_SUB == "LRU": ram.registrar_acesso(frame_number)
 
@@ -66,7 +67,8 @@ with open(PATH_SAIDA, "w") as result:
                     registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
                     continue
 
-                # PageFault
+                # PageFault -> ler no BACKING_STORE.bin
+
                 frame_number = ram.ler_backing_store(page_number, TAMANHO_PAGINA, page_table, tlb)
                 
                 physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
