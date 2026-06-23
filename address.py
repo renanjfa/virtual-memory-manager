@@ -27,3 +27,16 @@ def registrar_endereco_conteudo(arquivo, logical_address, physical_address, cont
     Escreve no arquivo passado por parametro os enderecos logicos e fisicos, alem do conteudo na memoria.
     """
     arquivo.write(f"Endereco Virtual: {logical_address}  Endereco Fisico: {physical_address}  Conteudo: {conteudo}\n")
+
+def mostrar_taxas(arquivo, tlb, page_table, total_enderecos):
+    """
+    Escreve as estatisticas e taxas no arquivo result (correct.txt)
+    """
+
+    tlb_hit = tlb.get_hit_rate()
+    page_faults = page_table.get_page_fault_count()
+
+    page_fault_rate = (page_faults / total_enderecos) * 100
+
+    arquivo.write(f"\n\nTAXA DE TLB HIT: {tlb_hit:.2f}%\n")
+    arquivo.write(f"TAXA DE PAGE-FAULT: {page_fault_rate:.2f}%")

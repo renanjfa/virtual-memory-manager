@@ -54,6 +54,14 @@ class TLB:
 
         nova_entrada = TLBEntry(page_number, frame_number)
         self.tabela[page_number] = nova_entrada
+
+
+    def invalidate(self, page_number):
+        """
+        Invalida/Remove a page number da tabela.
+        """
+        if page_number in self.tabela:
+            del self.tabela[page_number]
     
 
     def clear(self):

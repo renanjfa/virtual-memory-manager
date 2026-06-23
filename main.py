@@ -13,10 +13,11 @@ CAPACIDADE_MEMORIA_FISICA = 65536
 TAMANHO_PAGINA = CAPACIDADE_MEMORIA_FISICA // QUADROS
 PATH_SAIDA = "saida/correct.txt"
 
-tlb = TLB(capacidade= 16, algoritmo= ALGORITMO_SUB)
-page_table = PageTable(num_quadros=256)       
-ram = RAM(quantidade_quadros=QUADROS)
+tlb = TLB(16, ALGORITMO_SUB)
+page_table = PageTable(256)       
+ram = RAM(QUADROS, CAPACIDADE_MEMORIA_FISICA, ALGORITMO_SUB)
 
+total_enderecos = 0
 
 with open(PATH_SAIDA, "w") as result:
     with open(ADDRESS_FILE, "r", encoding="utf-8") as arquivo:
@@ -30,45 +31,50 @@ with open(PATH_SAIDA, "w") as result:
                 tlb.show(result)
 
             else:
+                total_enderecos += 1
+
                 logical_address = int(linha)
                 page_number, offset = conversor_logical_address(TAMANHO_PAGINA, logical_address)
+                print(
+                    f"logical={logical_address}, "
+                    f"page={page_number}, "
+                    f"offset={offset}"
+                )
 
                 frame_number = tlb.lookup(page_number)
 
                 # TLB Hit!!
                 if frame_number is not None:
-                    ram.registrar_acesso(frame_number)
+                    if ALGORITMO_SUB == "LRU": ram.registrar_acesso(frame_number)
+
                     physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
-                    conteudo = ram[physical_address]
+                    conteudo = ram.get_conteudo(physical_address)
                     registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
                     continue
 
                 # TLB Miss
+
                 frame_number = page_table.lookup(page_number)
 
                 # PageTable Hit!!
                 if frame_number is not None:
-                    ram.registrar_acesso(frame_number)
+                    if ALGORITMO_SUB == "LRU": ram.registrar_acesso(frame_number)
+
                     tlb.update(page_number, frame_number)
                     physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
-                    conteudo = ram[physical_address]
+                    conteudo = ram.get_conteudo(physical_address)
                     registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
                     continue
 
                 # PageFault
-                frame_number = ram.ler_backing_store(page_number, TAMANHO_PAGINA, ALGORITMO_SUB, page_table, tlb)
-                page_table.update(page_number, frame_number)
-                tlb.update(page_number, frame_number)
+                frame_number = ram.ler_backing_store(page_number, TAMANHO_PAGINA, page_table, tlb)
                 
                 physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
-                conteudo = ram[physical_address]
+                conteudo = ram.get_conteudo(physical_address)
                 registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
 
 
-    tlb_hit = tlb.get_hit_rate()
-    page_fault = page_table.get_page_fault_rate()
-    result.write(f"\n\nTAXA DE TLB HIT: {tlb_hit}%\n")
-    result.write(f"TAXA DE PAGE-FAULT: {page_fault}%")
+    mostrar_taxas(result, tlb, page_table, total_enderecos)
 
 
 
