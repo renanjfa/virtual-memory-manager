@@ -2,6 +2,7 @@ import sys
 from address import *
 from TLB import TLB
 from PageTable import PageTable
+from RAM import RAM
 
 # Parâmetros lidos do terminal
 ADDRESS_FILE    = sys.argv[1]
@@ -10,13 +11,14 @@ ALGORITMO_SUB   = sys.argv[3]
 
 CAPACIDADE_MEMORIA_FISICA = 65536
 TAMANHO_PAGINA = CAPACIDADE_MEMORIA_FISICA // QUADROS
+PATH_SAIDA = "saida/correct.txt"
 
 tlb = TLB(capacidade= 16, algoritmo= ALGORITMO_SUB)
-page_table = PageTable()
-ram = RAM()
+page_table = PageTable(num_quadros=256)       
+ram = RAM(quantidade_quadros=QUADROS)
 
 
-with open("correct.txt", "w") as result:
+with open(PATH_SAIDA, "w") as result:
     with open(ADDRESS_FILE, "r", encoding="utf-8") as arquivo:
         for linha in arquivo:
             linha = linha.strip()
@@ -35,9 +37,10 @@ with open("correct.txt", "w") as result:
 
                 # TLB Hit!!
                 if frame_number is not None:
+                    ram.registrar_acesso(frame_number)
                     physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
                     conteudo = ram[physical_address]
-                    # result.write(conteudo e enderecos conforme o padrao)
+                    registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
                     continue
 
                 # TLB Miss
@@ -45,26 +48,27 @@ with open("correct.txt", "w") as result:
 
                 # PageTable Hit!!
                 if frame_number is not None:
+                    ram.registrar_acesso(frame_number)
                     tlb.update(page_number, frame_number)
                     physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
                     conteudo = ram[physical_address]
-                    # result.write(conteudo e enderecos conforme o padrao)
+                    registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
                     continue
 
                 # PageFault
-                frame_number = ram.ler_backing_store(page_number, TAMANHO_PAGINA, ALGORITMO_SUB)
-                page_table.update()
+                frame_number = ram.ler_backing_store(page_number, TAMANHO_PAGINA, ALGORITMO_SUB, page_table, tlb)
+                page_table.update(page_number, frame_number)
                 tlb.update(page_number, frame_number)
                 
                 physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
                 conteudo = ram[physical_address]
-                # result.write(conteudo e enderecos conforme o padrao)
+                registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)
 
 
     tlb_hit = tlb.get_hit_rate()
     page_fault = page_table.get_page_fault_rate()
-    result.write("\n\nTAXA DE TLB HIT: " + tlb_hit + "%\n")
-    result.write("TAXA DE PAGE-FAULT: " + page_fault + "%")
+    result.write(f"\n\nTAXA DE TLB HIT: {tlb_hit}%\n")
+    result.write(f"TAXA DE PAGE-FAULT: {page_fault}%")
 
 
 
