@@ -12,10 +12,10 @@ class PageTable:
         self.page_faults = 0
 
     def lookup(self, page_number):
-        """Busca o frame associado à página lida."""
-        self.total_acessos += 1
+        """
+        Busca o frame associado à página lida.
+        """
         
-        # Garante que a página requisitada está no escopo válido
         if page_number < 0 or page_number >= self.total_paginas:
             return None
             
@@ -37,17 +37,15 @@ class PageTable:
         if 0 <= page_number < self.total_paginas:
             self.tabela[page_number] = -1
 
-    def get_page_fault_rate(self):
+    def get_page_fault_count(self):
         """Calcula e retorna a taxa de page fault em string formatada."""
-        if self.total_acessos == 0:
-            return "0.0"
-        taxa = (self.page_faults / self.total_acessos) * 100
-        return f"{taxa:.2f}"
+        return self.page_faults
+        # taxa = (self.page_faults / self.total_acessos) * 100
 
     def show(self, arquivo_write):
         """Escreve o estado atual da Page Table no arquivo especificado."""
         arquivo_write.write("============ PAGE TABLE ============\n")
-        arquivo_write.write("Página -> Quadro\n")
+        arquivo_write.write("Pagina -> Quadro\n")
         for pagina, quadro in enumerate(self.tabela):
             if quadro != -1:
                 arquivo_write.write(f"  {pagina}   ->   {quadro}\n")
