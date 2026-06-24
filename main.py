@@ -4,6 +4,12 @@ from TLB import TLB
 from PageTable import PageTable
 from RAM import RAM
 
+# tratamento de erro para argumentos errados
+if len(sys.argv) != 4:
+    print("Uso: python main.py <address_file> <quadros> <algoritmo_substituicao>")
+    print("Makefile: make run ADDRESS=<address_file> FRAMES=<quadros> ALGO=<algoritmo_substituicao>")
+    sys.exit(1)
+
 ADDRESS_FILE    = sys.argv[1]
 QUADROS         = int(sys.argv[2])
 ALGORITMO_SUB   = sys.argv[3]
