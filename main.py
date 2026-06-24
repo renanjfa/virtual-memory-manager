@@ -34,11 +34,6 @@ with open(PATH_SAIDA, "w") as result:
 
                 logical_address = int(linha)
                 page_number, offset = conversor_logical_address(TAMANHO_PAGINA, logical_address)
-                print(
-                    f"logical={logical_address}, "
-                    f"page={page_number}, "
-                    f"offset={offset}"
-                )
 
                 frame_number = tlb.lookup(page_number)
 
@@ -62,6 +57,7 @@ with open(PATH_SAIDA, "w") as result:
                     if ALGORITMO_SUB == "LRU": ram.registrar_acesso(frame_number)
 
                     tlb.update(page_number, frame_number)
+                    
                     physical_address = montar_physical_address(TAMANHO_PAGINA, frame_number, offset)
                     conteudo = ram.get_conteudo(physical_address)
                     registrar_endereco_conteudo(result, logical_address, physical_address, conteudo)

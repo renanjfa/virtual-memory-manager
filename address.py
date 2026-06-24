@@ -15,7 +15,7 @@ def conversor_logical_address(tam_pagina, logical_address):
 
 def montar_physical_address(tam_pagina, frame_number, offset):
     """
-    Retorna o endereco fisico na RAM montado a partir do frame_number e offset
+    Retorna o endereco fisico na RAM montado a partir do frame_number e offset.
     """
     BITS_OFFSET = int(math.log2(tam_pagina))
     physical_address = (frame_number << BITS_OFFSET) | offset
@@ -28,15 +28,25 @@ def registrar_endereco_conteudo(arquivo, logical_address, physical_address, cont
     """
     arquivo.write(f"Endereco Virtual: {logical_address}  Endereco Fisico: {physical_address}  Conteudo: {conteudo}\n")
 
+
 def mostrar_taxas(arquivo, tlb, page_table, total_enderecos):
     """
-    Escreve as estatisticas e taxas no arquivo result (correct.txt)
+    Escreve as estatisticas e taxas no arquivo result (correct.txt).
     """
-
-    tlb_hit = tlb.get_hit_rate()
+    tlb_hit_rate = tlb.get_hit_rate()
+    tlb_hits = tlb.get_tlb_hit_count()
     page_faults = page_table.get_page_fault_count()
 
     page_fault_rate = (page_faults / total_enderecos) * 100
 
-    arquivo.write(f"\n\nTAXA DE TLB HIT: {tlb_hit:.2f}%\n")
-    arquivo.write(f"TAXA DE PAGE-FAULT: {page_fault_rate:.2f}%")
+    arquivo.write(f"\n\n\n\n====================================================")
+    arquivo.write(      f"\n============== ESTATISTICAS SIMULADOR ==============")
+    arquivo.write(      f"\n====================================================\n\n")
+
+    arquivo.write(f"TOTAL DE ACESSOS/ENDERECOS: {total_enderecos}\n\n")
+
+    arquivo.write(f"QUANTIDADE DE TLB HIT:      {tlb_hits}\n")
+    arquivo.write(f"TAXA DE TLB HIT:            {tlb_hits} / {total_enderecos} = {tlb_hit_rate:.2f}%\n\n")
+    
+    arquivo.write(f"QUANTIDADE DE PAGE FAULT:   {page_faults}\n")
+    arquivo.write(f"TAXA DE PAGE-FAULT:         {page_faults} / {total_enderecos} = {page_fault_rate:.2f}%")
