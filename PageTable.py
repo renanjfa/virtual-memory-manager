@@ -7,9 +7,8 @@ class PageTable:
         # Inicializa mapeamento: página -> frame. -1 significa não mapeado (Inválido)
         self.tabela = [-1] * self.total_paginas
         
-        # Métricas para estatísticas
-        self.total_acessos = 0
         self.page_faults = 0
+
 
     def lookup(self, page_number):
         """
@@ -27,26 +26,39 @@ class PageTable:
             
         return frame
 
+
     def update(self, page_number, frame_number):
-        """Mapeia uma página lógica para um quadro físico na RAM."""
+        """
+        Mapeia o page number para um frame na RAM.
+        """
         if 0 <= page_number < self.total_paginas:
             self.tabela[page_number] = frame_number
 
+
     def invalidate(self, page_number):
-        """Remove o mapeamento de uma página (usado quando ela é expulsa da RAM)."""
+        """
+        Remove o mapeamento de uma página, usado quando ela é expulsa da RAM.
+        """
         if 0 <= page_number < self.total_paginas:
             self.tabela[page_number] = -1
 
-    def get_page_fault_count(self):
-        """Calcula e retorna a taxa de page fault em string formatada."""
-        return self.page_faults
-        # taxa = (self.page_faults / self.total_acessos) * 100
 
-    def show(self, arquivo_write):
-        """Escreve o estado atual da Page Table no arquivo especificado."""
-        arquivo_write.write("============ PAGE TABLE ============\n")
-        arquivo_write.write("Pagina -> Quadro\n")
+    def get_page_fault_count(self):
+        """
+        Calcula e retorna a quantidade de page faults na page table.
+        """
+        return self.page_faults
+
+
+    def show(self, arquivo):
+        """
+        Escreve o estado atual da Page Table no arquivo especificado.
+        """
+        arquivo.write("\n###########\n")
+        arquivo.write("Pagina - Quadro\n")
+
         for pagina, quadro in enumerate(self.tabela):
             if quadro != -1:
-                arquivo_write.write(f"  {pagina}   ->   {quadro}\n")
-        arquivo_write.write("====================================\n")
+                arquivo.write(f"  {pagina:>2}   ->   {quadro:>2}\n")
+
+        arquivo.write("###########\n\n")
