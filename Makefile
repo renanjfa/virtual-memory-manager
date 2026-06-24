@@ -1,17 +1,19 @@
 PYTHON = python3
 MAIN = main.py
-ADDRESS ?=
-FRAMES  ?=
-ALGO    ?= 
 
-.PHONY: all run clean
+.PHONY: all clean
 
-all: run
+all: simulador
 
-run:
-	$(PYTHON) $(MAIN) $(ADDRESS) $(FRAMES) $(ALGO)
+simulador:
+	@echo '#!/bin/bash' > simulador
+	@echo '$(PYTHON) $(MAIN) "$$@"' >> simulador
+	@chmod +x simulador
+	@echo "Executável criado: ./simulador"
+	@echo "Executar como: ./simulador <ADDRESS.TXT> <QUADROS> <ALGORTIMO_SUB>"
 
 clean:
+	rm -f simulador
 	rm -rf __pycache__
 	rm -f *.pyc
 	rm -f output.txt
