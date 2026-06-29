@@ -50,7 +50,6 @@ class TLB:
 
         if len(self.tabela) >= self.capacidade:
             self.tabela.popitem(last=False)     # remove o primeiro do dicionario ordenado
-            return
 
         nova_entrada = TLBEntry(page_number, frame_number)
         self.tabela[page_number] = nova_entrada

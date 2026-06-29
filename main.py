@@ -79,6 +79,9 @@ with open(PATH_SAIDA, "w") as result:
 
 
     mostrar_taxas(result, tlb, page_table, total_enderecos)
+    print()
+    print("EXECUÇÃO FINALIZADA!!")
+    print("Veja os resultados no arquivo correct.txt gerado.")
 
 
 
